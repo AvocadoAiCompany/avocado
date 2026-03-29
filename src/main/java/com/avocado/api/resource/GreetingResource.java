@@ -1,34 +1,42 @@
 package com.avocado.api.resource;
 
+import com.avocado.api.service.CountryTimezoneResolver;
 import com.avocado.api.service.TimeService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Path("/greet")
 public class GreetingResource {
-    private final TimeService timeService;
 
-    public GreetingResource(TimeService timeService) {
+    private final TimeService timeService;
+    private final CountryTimezoneResolver countryTimezoneResolver;
+
+    public GreetingResource(TimeService timeService, CountryTimezoneResolver countryTimezoneResolver) {
         this.timeService = timeService;
+        this.countryTimezoneResolver = countryTimezoneResolver;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Greeting getGreeting() {
-        LocalTime now = timeService.getCurrentTime();
-        int hour = now.getHour();
-        String message;
-
-        if (hour >= 5 && hour < 12) {
-            message = "Good morning";
-        } else if (hour >= 12 && hour < 17) {
-            message = "Good afternoon";
-        } else if (hour >= 17 && hour < 20) {
-            message = "Good evening";
+    public Greeting getGreeting(@QueryParam("country") String country) {
+        LocalTime now;
+        if (country != null && !country.isBlank()) {
+            ZoneId zone = countryTimezoneResolver.resolve(country);
+            now = timeService.getTimeForZone(zone);
         } else {
-            message = "Good night";
+            now = timeService.getCurrentTime();
         }
+
+        int hour = now.getHour();
+        String message = switch (hour) {
+            case int h when h >= 5 && h < 12  -> "Good morning";
+            case int h when h >= 12 && h < 17 -> "Good afternoon";
+            case int h when h >= 17 && h < 20 -> "Good evening";
+            default                            -> "Good night";
+        };
 
         return new Greeting(message);
     }
