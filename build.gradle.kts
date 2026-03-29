@@ -24,11 +24,12 @@ dependencies {
 
     testImplementation("io.dropwizard:dropwizard-testing:$dropwizardVersion")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.11.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 application {
-    mainClass = "com.avocado.api.AvocadoApiApplication"
+    mainClass = "com.avocado.api.Application"
 }
 
 tasks.test {
