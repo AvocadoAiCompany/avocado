@@ -1,0 +1,5 @@
+server:
+  type: netty
+  applicationConnectors:
+    - type: HTTP
+      port: 8080

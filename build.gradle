@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.avocado'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.dropwizard:dropwizard-core:2.1.0'
+    implementation 'io.dropwizard:dropwizard-server:2.1.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    testImplementation 'io.dropwizard:dropwizard-testing:2.1.0'
+}
+
+application {
+    mainClass = 'io.dropwizard.core.server.ServerMain'
+}
+
+test {
+    useJUnitPlatform = true
+}
