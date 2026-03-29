@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record RandomNumberRequest(
         @NotNull
-        @Size(min = 240, max = 240, message = "input must be exactly 240 characters")
+        @Size(min = 512, max = 512, message = "input must be exactly 512 characters")
         @JsonProperty("input")
         String input
 ) {}
