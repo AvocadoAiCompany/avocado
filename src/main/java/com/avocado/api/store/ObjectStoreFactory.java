@@ -38,7 +38,9 @@ public final class ObjectStoreFactory {
                 executor = Executors.newSingleThreadScheduledExecutor(
                         r -> new Thread(r, "snapshot-scheduler"));
                 long interval = config.getSnapshotIntervalSeconds();
-                executor.scheduleAtFixedRate(
+                // scheduleWithFixedDelay waits for each save to finish before starting
+                // the next delay, preventing task pile-up if a save runs long.
+                executor.scheduleWithFixedDelay(
                         () -> safeSnapshot(snapshotManager),
                         interval, interval, TimeUnit.SECONDS);
                 log.info("Snapshot scheduler started (interval={}s)", interval);
